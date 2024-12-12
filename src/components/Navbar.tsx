@@ -60,9 +60,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/signup"
-              className={`px-4 py-2 rounded-md hover:bg-green-700 ${
-                isActive("/signup") ? "bg-green-600 text-white" : "bg-gray-300 text-gray-700"
-              }`}
+              className={"px-4 py-2 rounded-md hover:bg-green-700 bg-green-600 text-white"}
             >
               Regístrate
             </Link>
@@ -132,9 +130,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/signup"
-              className={`block px-4 py-2 rounded-md hover:bg-green-700 ${
-                isActive("/signup") ? "bg-green-600 text-white" : "bg-gray-300 text-gray-700"
-              }`}
+              className={"block px-4 py-2 rounded-md hover:bg-green-700 bg-green-600 text-white"}
             >
               Regístrate
             </Link>
