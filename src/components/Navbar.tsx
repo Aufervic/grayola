@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { supabase } from "@/utils/SessionContext";
 import { useSessionContext } from "@/utils/SessionContext"; // Importamos el contexto
+import Image from 'next/image';
+
 
 export default function Navbar() {
   const pathname = usePathname(); // Obtiene la ruta actual
@@ -27,19 +29,26 @@ export default function Navbar() {
           {/* Logotipo */}
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold text-gray-800 hover:text-gray-600">
-              Grayola
+              <Image
+                src="/images/grayola_icon.png" // Ruta relativa a la carpeta "public"
+                alt="Logo de Grayola"
+                width={120} // Ancho de la imagen
+                height={40} // Alto de la imagen
+              />
             </Link>
           </div>
 
           {/* Navegación para pantallas grandes */}
           <div className="hidden md:flex space-x-8 items-center">
-            <Link
+            {session ? (<Link
               href="/projects"
               className={`text-gray-700 hover:text-green-600 font-medium ${isActive("/projects") ? "text-green-600 font-bold" : ""
                 }`}
             >
               Proyectos
             </Link>
+            ) : (null)}
+
             {profile?.role === "Client" ? (
               <Link
                 href="/projects/new"
@@ -52,7 +61,7 @@ export default function Navbar() {
 
             <Link
               href="/about"
-              className={`text-gray-700 hover:text-green-600 font-medium ${isActive("/contact") ? "text-green-600 font-bold" : ""
+              className={`text-gray-700 hover:text-green-600 font-medium ${isActive("/about") ? "text-green-600 font-bold" : ""
                 }`}
             >
               Acerca de
@@ -88,7 +97,7 @@ export default function Navbar() {
                   href="/signup"
                   className={"px-4 py-2 rounded-md hover:bg-green-700 bg-green-600 text-white"}
                 >
-                  Regístrate
+                  Registrarse
                 </Link>
               </>
             )}
@@ -139,8 +148,8 @@ export default function Navbar() {
               Nuevo Proyecto
             </Link>
             <Link
-              href="/contact"
-              className={`block text-gray-700 hover:text-green-600 font-medium ${isActive("/contact") ? "text-green-600 font-bold" : ""
+              href="/about"
+              className={`block text-gray-700 hover:text-green-600 font-medium ${isActive("/about") ? "text-green-600 font-bold" : ""
                 }`}
             >
               Contacto
@@ -171,7 +180,7 @@ export default function Navbar() {
                   href="/signup"
                   className="block px-4 py-2 rounded-md hover:bg-green-700 bg-green-600 text-white"
                 >
-                  Regístrate
+                  Registrarse
                 </Link>
               </>
             )}

@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // Estado para mensajes de error
-  
+
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -25,10 +25,10 @@ export default function LoginPage() {
         setErrorMessage("Error al iniciar sesión: " + error.message);
       } else {
         // Redirigir al usuario tras login exitoso
-       // Redirigir al usuario a la página /projects
-       setTimeout(()=> {
-        router.push("/projects");
-       }, 3000)
+        // Redirigir al usuario a la página /projects
+        setTimeout(() => {
+          router.push("/projects");
+        }, 3000)
       }
     } catch (err) {
       setErrorMessage("Ocurrió un error inesperado. Por favor, intenta nuevamente.");
@@ -36,7 +36,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-green-100">
+    <div className="h-screen bg-gradient-to-br from-green-500 via-teal-400 to-cyan-500 flex flex-col justify-center items-center relative">
+
       <div className="max-w-md mx-auto p-6 bg-green-50 shadow-lg rounded-md border border-green-300">
         <h1 className="text-2xl font-bold text-green-700 text-center mb-4">Iniciar Sesión</h1>
         {errorMessage && (
@@ -54,7 +55,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full mt-1 p-2 border border-green-300 rounded focus:ring-green-500 focus:border-green-500"
+              className="w-full mt-1 p-2 border border-green-300 rounded-md focus:outline-none focus:ring focus:ring-green-200 text-gray-800"
               required
             />
           </div>
@@ -67,7 +68,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full mt-1 p-2 border border-green-300 rounded focus:ring-green-500 focus:border-green-500"
+              className="w-full mt-1 p-2 border border-green-300 rounded-md focus:outline-none focus:ring focus:ring-green-200 text-gray-800"
               required
             />
           </div>
