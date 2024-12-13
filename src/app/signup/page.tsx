@@ -1,9 +1,7 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import { createClient } from '@supabase/supabase-js';
-import { supabase } from "@/utils/SessionContext";
-// const supabase = createClient("https://efoeppbhiedlznwxecaa.supabase.co/", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmb2VwcGJoaWVkbHpud3hlY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM3NjYzMTcsImV4cCI6MjA0OTM0MjMxN30.l9A4wpr6OzW0FtO2vYj6HKs50T_ZJzOX6jhCw5GxAG8");
+import { supabase, useSessionContext } from "@/utils/SessionContext";
 
 
 export default function SignUp() {
@@ -16,6 +14,16 @@ export default function SignUp() {
   const [message, setMessage] = useState("");
 
   const router = useRouter()
+  const { session, profile } = useSessionContext()
+
+  useEffect(() => {
+    if (session !== null) {
+      // Si no hay sesión, redirigir al login
+      router.push("/projects");
+    } else {
+      // no hay drama
+    }
+  }, [session, router]);
 
   const handleSignUp = async () => {
     if (password.length < 6) {

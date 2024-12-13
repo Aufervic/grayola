@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { supabase } from "@/utils/SessionContext";
+import { supabase, useSessionContext } from "@/utils/SessionContext";
 
 
 async function loadProject(id: string) {
@@ -86,12 +86,21 @@ async function loadDesigners2() {
 
 export default function AssignDesigner() {
   const router = useRouter();
+  const { session, profile } = useSessionContext()
+
   const { id } = useParams();
   const [project, setProject] = useState<any>(null)
   const [designers, setDesigners] = useState<any>([])
   const [selectedDesigner, setSelectedDesigner] = useState("");
 
-
+  useEffect(() => {
+    if (session === null) {
+      // Si no hay sesión, redirigir al login
+      router.push("/login");
+    } else if (profile?.role !== "Project Manager") {
+      router.push("/projects");
+    }
+  }, [session, router]);
 
   useEffect(() => {
     if (!id) return;

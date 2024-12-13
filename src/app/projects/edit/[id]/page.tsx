@@ -1,11 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
-import { createClient } from '@supabase/supabase-js';
-import { supabase } from "@/utils/SessionContext";
-// const supabase = createClient("https://efoeppbhiedlznwxecaa.supabase.co/", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmb2VwcGJoaWVkbHpud3hlY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM3NjYzMTcsImV4cCI6MjA0OTM0MjMxN30.l9A4wpr6OzW0FtO2vYj6HKs50T_ZJzOX6jhCw5GxAG8");
+import { useRouter, useParams } from "next/navigation";
+import { supabase, useSessionContext } from "@/utils/SessionContext";
 
 
 interface Project {
@@ -16,6 +13,8 @@ interface Project {
 }
 
 export default function EditProject() {
+  const router = useRouter();
+  const { session, profile } = useSessionContext()
   const params = useParams();
   const projectID = params.id;
 
@@ -27,7 +26,15 @@ export default function EditProject() {
   const [filesToDelete, setFilesToDelete] = useState<string[]>([]);
   const [loading, setLoading] = useState(false); // Estado de carga
 
-  const router = useRouter();
+
+  useEffect(() => {
+    if (session === null) {
+      // Si no hay sesión, redirigir al login
+      router.push("/login");
+    } else if (profile?.role !== "Project Manager") {
+      router.push("/projects");
+    }
+  }, [session, router]);
 
   useEffect(() => {
     if (!projectID) return;
@@ -233,8 +240,8 @@ export default function EditProject() {
               type="submit"
               className="w-full py-2 px-4 bg-green-600 text-white font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               disabled={loading} // Deshabilitar botón mientras carga
-              >
-                  {loading ? "Guardando Cambios..." : "Guardar Cambios"}
+            >
+              {loading ? "Guardando Cambios..." : "Guardar Cambios"}
             </button>
           </div>
         </form>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import { useEffect, useState } from "react";
 import { useSessionContext } from "@/utils/SessionContext";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 async function loadProject(id: string) {
     const url = `https://efoeppbhiedlznwxecaa.supabase.co/rest/v1/projects?id=eq.${id}`
@@ -28,11 +28,21 @@ async function loadProject(id: string) {
 
 export default function ProjectDetail() {
     const params = useParams()
+    const router = useRouter()
     const projectID = params.id;
     const [project, setProject] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
-    const { profile } = useSessionContext();
+    const { session, profile } = useSessionContext();
 
+
+    useEffect(() => {
+        if (session === null || session.session === null ) {
+            // Si no hay sesión, redirigir al login
+            router.push("/login");        
+        } else {
+            // no hay drama
+        }
+    }, [session, router]);
 
     useEffect(() => {
         if (!projectID) return;

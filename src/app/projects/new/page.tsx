@@ -15,11 +15,11 @@ export default function NewProject() {
 
 
     useEffect(() => {
-        if (session === null || session.session === null) {
+        if (session === null || session.session === null ) {
             // Si no hay sesión, redirigir al login
-            router.push("/login");
-        } else {
-            // Si hay sesión
+            router.push("/login");        
+        } else if(session?.profile?.role !=="Client"){
+            router.push("/projects");        
         }
     }, [session, router]);
 

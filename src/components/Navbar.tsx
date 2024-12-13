@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { supabase } from "@/utils/SessionContext";
 import { useSessionContext } from "@/utils/SessionContext"; // Importamos el contexto
@@ -9,6 +9,7 @@ import Image from 'next/image';
 
 export default function Navbar() {
   const pathname = usePathname(); // Obtiene la ruta actual
+  const router = useRouter()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { session, profile } = useSessionContext();  // Obtenemos la sesión y el perfil del usuario
 
@@ -19,6 +20,11 @@ export default function Navbar() {
     const { error } = await supabase.auth.signOut();  // Cerramos sesión con Supabase
     if (error) {
       console.log("Error al cerrar sesión", error.message);
+    }else{
+      console.log("Sesión cerrada con éxito")
+      console.log("session", session)
+      console.log("profile", profile)
+      router.push("/")
     }
   };
 

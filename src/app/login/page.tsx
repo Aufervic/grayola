@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { supabase } from "@/utils/SessionContext";
+import { useState, useEffect } from "react";
+import { supabase, useSessionContext } from "@/utils/SessionContext";
 import { useRouter } from "next/navigation";
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,16 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState(""); // Estado para mensajes de error
 
   const router = useRouter()
+  const { session, profile } = useSessionContext()
+
+  useEffect(() => {
+      if (session !== null) {
+        // Si no hay sesión, redirigir al login
+        router.push("/projects");
+      } else {
+        // no hay drama
+      }
+    }, [session, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
