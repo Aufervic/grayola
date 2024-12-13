@@ -1,17 +1,17 @@
 "use client";
 
-import { FiPaperclip, FiEdit, FiTrash2, FiEye } from "react-icons/fi";
+import { FiPaperclip, FiEdit, FiTrash2, FiEye, FiUserPlus } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createClient } from '@supabase/supabase-js';
 import { supabase } from "@/utils/SessionContext";
-// const supabase = createClient("https://efoeppbhiedlznwxecaa.supabase.co/", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmb2VwcGJoaWVkbHpud3hlY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM3NjYzMTcsImV4cCI6MjA0OTM0MjMxN30.l9A4wpr6OzW0FtO2vYj6HKs50T_ZJzOX6jhCw5GxAG8");
 
+// Definición de tipos
 type ProjectCardProps = {
   id: string;
   title: string;
   description: string;
   attachmentsCount: number;
+  userRole: string;
 };
 
 export default function ProjectCard({
@@ -19,6 +19,7 @@ export default function ProjectCard({
   title,
   description,
   attachmentsCount,
+  userRole,
 }: ProjectCardProps) {
   const router = useRouter();
 
@@ -65,31 +66,55 @@ export default function ProjectCard({
 
       {/* Acciones */}
       <div className="flex justify-end space-x-4 mt-4">
+        {/* Botón Detalle */}
         <Link
           href={`/projects/${id}`}
           className="flex items-center px-3 py-1 text-sm text-green-600 border border-green-600 rounded-lg hover:bg-green-600 hover:text-white transition"
+          title="Ver detalle del proyecto"
         >
           <FiEye className="w-4 h-4 mr-1" />
           Detalle
         </Link>
-        {/* Botón de Editar */}
-        <Link
-          href={`/projects/edit/${id}`}
-          className="flex items-center px-3 py-1 text-sm text-green-600 border border-green-600 rounded-lg hover:bg-green-600 hover:text-white transition"
-        >
-          <FiEdit className="w-4 h-4 mr-1" />
-          Editar
-        </Link>
 
-        {/* Botón de Eliminar */}
-        <button
-          onClick={handleDelete}
-          className="flex items-center px-3 py-1 text-sm text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition"
-        >
-          <FiTrash2 className="w-4 h-4 mr-1" />
-          Eliminar
-        </button>
+        {/* Botón Editar */}
+        {userRole === "Project Manager" ? (
+          <Link
+            href={`/projects/edit/${id}`}
+            className="flex items-center px-3 py-1 text-sm text-yellow-600 border border-yellow-600 rounded-lg hover:bg-yellow-600 hover:text-white transition"
+            title="Editar este proyecto"
+          >
+            <FiEdit className="w-4 h-4 mr-1" />
+            Editar
+          </Link>
+        ) : null}
+
+       
+
+        {/* Botón Asignar Diseñador */}
+        {userRole === "Project Manager" ? (
+          <Link
+            href={`/projects/assign/${id}`}
+            className="flex items-center px-3 py-1 text-sm text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition"
+            title="Asignar un diseñador a este proyecto"
+          >
+            <FiUserPlus className="w-4 h-4 mr-1" />
+            Asignar
+          </Link>
+        ) : null}
+
+         {/* Botón Eliminar */}
+         {userRole === "Project Manager" ? (
+          <button
+            onClick={handleDelete}
+            className="flex items-center px-3 py-1 text-sm text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition"
+            title="Eliminar este proyecto permanentemente"
+          >
+            <FiTrash2 className="w-4 h-4 mr-1" />
+            Eliminar
+          </button>
+        ) : null}
       </div>
     </div>
   );
 }
+

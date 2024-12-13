@@ -125,7 +125,7 @@ export default function SignUp() {
                 >
                     <option value="Client">Cliente</option>
                     <option value="Project Manager">Project Manager</option>
-                    <option value="Design">Diseñador</option>
+                    <option value="Designer">Diseñador</option>
                 </select>
 
                 <button

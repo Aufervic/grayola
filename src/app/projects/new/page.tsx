@@ -1,10 +1,8 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from '@supabase/supabase-js';
-import { supabase } from "@/utils/SessionContext";
-// const supabase = createClient("https://efoeppbhiedlznwxecaa.supabase.co/", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmb2VwcGJoaWVkbHpud3hlY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM3NjYzMTcsImV4cCI6MjA0OTM0MjMxN30.l9A4wpr6OzW0FtO2vYj6HKs50T_ZJzOX6jhCw5GxAG8");
+import { supabase, useSessionContext } from "@/utils/SessionContext";
 
 export default function NewProject() {
     const [title, setTitle] = useState("");
@@ -12,7 +10,18 @@ export default function NewProject() {
     const [files, setFiles] = useState<File[]>([]);
     const [loading, setLoading] = useState(false); // Estado de carga
 
+    const session = useSessionContext();
     const router = useRouter()
+
+
+    useEffect(() => {
+        if (session === null || session.session === null) {
+          // Si no hay sesión, redirigir al login
+          router.push("/login");
+        } else {
+          // Si hay sesión
+        }
+      }, [session, router]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -22,7 +31,7 @@ export default function NewProject() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        console.log("Empezar a crear")
         setLoading(true); // Inicia la carga
         
 
@@ -32,24 +41,24 @@ export default function NewProject() {
             const timestamp = Date.now(); // O puedes usar una librería para generar un UUID.
             const uniqueFileName = `${timestamp}-${file.name}`;
 
-
+            console.log("1")
             const { data, error } = await supabase.storage
                 .from('projects') // El nombre de tu contenedor en Supabase
                 .upload(`public/${uniqueFileName}`, file, { upsert: false });
 
             if (error) {
-                console.error("Error al subir el archivo:", error);
+                console.log("Error al subir el archivo:", error);
                 setLoading(false);
                 return;
             }
-
+            console.log("2")
             // Obtener la URL pública del archivo subido
             const { data: publicData } = supabase.storage
                 .from('projects')
                 .getPublicUrl(data.path);
 
                 if (!publicData) {
-                    console.error("Error al obtener la URL del archivo");
+                    console.log("Error al obtener la URL del archivo");
                     setLoading(false);
                     return;
                 }
@@ -63,8 +72,10 @@ export default function NewProject() {
             title,
             description,
             files: fileUrls, // Agregar las URLs de los archivos al campo 'files'
+            user_id: session?.profile?.user_id
         };
 
+        console.log(JSON.stringify(requestBody))
         // Enviar la solicitud POST a la API para crear el proyecto
         const response = await fetch("https://efoeppbhiedlznwxecaa.supabase.co/rest/v1/projects", {
             method: "POST",

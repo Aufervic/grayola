@@ -37,6 +37,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
       // Escuchar cambios en la sesión (login/logout)
       supabase.auth.onAuthStateChange(async(event, session) => {
+        console.log("Hubo un cambio en la sesion")
         setSession(session);
         if (session) {
           // Obtener perfil de nuevo después de cada cambio de sesión

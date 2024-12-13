@@ -10,10 +10,10 @@ interface Project {
     title: string;
     description: string;
     file: string[]
-  }
+}
 
-export default function ProjectsGrid ({ projects }: { projects: Project[] }){
-    const session = useSessionContext();
+export default function ProjectsGrid({ projects }: { projects: Project[] }) {
+    const { session, profile } = useSessionContext();
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -33,28 +33,30 @@ export default function ProjectsGrid ({ projects }: { projects: Project[] }){
                 <h2 className="text-2xl font-semibold text-center mb-4">Proyectos</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Tarjeta de Nuevo proyecto */}
-                <div className="bg-white border border-green-200 rounded-lg shadow-md p-4 max-w-md mx-auto hover:shadow-green-400 hover:border-green-400 transition-all duration-100">
-                    {/* Título */}
-                    <h3 className="text-lg font-bold text-gray-800 text-center">
-                        Crear Nuevo Proyecto
-                    </h3>
+                {profile?.role === "Client" ? (
+                    <div className="bg-white border border-green-200 rounded-lg shadow-md p-4 max-w-md mx-auto hover:shadow-green-400 hover:border-green-400 transition-all duration-100">
+                        {/* Título */}
+                        <h3 className="text-lg font-bold text-gray-800 text-center">
+                            Crear Nuevo Proyecto
+                        </h3>
 
-                    {/* Icono de creación */}
-                    <div className="flex justify-center items-center mt-4">
-                        <Link
-                            href="/projects/new"
-                            className="flex items-center justify-center w-16 h-16 bg-green-600 text-white rounded-full hover:bg-green-700 transition"
-                        >
-                            <FiPlus className="w-8 h-8" />
-                        </Link>
+                        {/* Icono de creación */}
+                        <div className="flex justify-center items-center mt-4">
+                            <Link
+                                href="/projects/new"
+                                className="flex items-center justify-center w-16 h-16 bg-green-600 text-white rounded-full hover:bg-green-700 transition"
+                            >
+                                <FiPlus className="w-8 h-8" />
+                            </Link>
+                        </div>
+
+                        {/* Descripción (opcional) */}
+                        <p className="text-sm text-gray-600 text-center mt-4">
+                            Haz clic para crear un nuevo proyecto.
+                        </p>
                     </div>
+                ) : (<></>)}
 
-                    {/* Descripción (opcional) */}
-                    <p className="text-sm text-gray-600 text-center mt-4">
-                        Haz clic para crear un nuevo proyecto.
-                    </p>
-                </div>
                 {projects?.map((project: any) => (
                     <ProjectCard
                         key={project.id}
@@ -62,6 +64,7 @@ export default function ProjectsGrid ({ projects }: { projects: Project[] }){
                         title={project?.title}
                         description={project?.description}
                         attachmentsCount={project.files?.length}
+                        userRole={profile?profile.role:"Client"}
                     // onEdit={handleEdit}
                     // onDelete={handleDelete}
                     />
@@ -69,6 +72,6 @@ export default function ProjectsGrid ({ projects }: { projects: Project[] }){
 
             </div>
 
-        </div>
+        </div >
     )
 }

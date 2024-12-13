@@ -19,7 +19,6 @@ async function loadProject(id: string) {
     }
 
     const data = await res.json()
-    console.log(data)
 
     return data[0]
 }
@@ -32,7 +31,7 @@ export default async function ProjectDetail({params,}: {params: { id: string };}
         <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 max-w-4xl mx-auto mt-8">
             {/* Título y descripción del proyecto */}
             <div className="mb-4">
-                <h2 className="text-3xl font-semibold text-gray-800">{project.title}</h2>
+                <h2 className="text-3xl font-semibold text-gray-800">{project.id+". "+project.title}</h2>
                 <p className="text-lg text-gray-600 mt-2">{project.description}</p>
             </div>
 
