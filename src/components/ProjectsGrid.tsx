@@ -4,13 +4,9 @@ import Link from "next/link"
 import { FiPlus } from "react-icons/fi";
 import { useSessionContext } from "@/utils/SessionContext";
 import { useEffect, useState } from "react";
+import { Project } from "@/utils/inerfaces";
 
-interface Project {
-    id: string;
-    title: string;
-    description: string;
-    file: string[]
-}
+
 
 export default function ProjectsGrid({ projects }: { projects: Project[] }) {
     const { session, profile } = useSessionContext();
@@ -32,6 +28,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
     if (!session) {
         return <p>No estás autenticado. Por favor, inicia sesión.</p>;
     }
+
     return (
         <div className="p-6 bg-gradient-to-br from-yellow-100 via-green-100 to-cyan-100 min-h-screen">
             <div className="flex justify-center items-center mb-6">
@@ -64,12 +61,12 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                     <></>
                 )}
 
-                {projects?.map((project: any) => (
+                {projects?.map((project: Project) => (
                     <ProjectCard
                         key={project.id}
-                        id={project.id}
-                        title={project?.title}
-                        description={project?.description}
+                        id={project.id || ""}
+                        title={project?.title|| ""}
+                        description={project?.description || ""}
                         attachmentsCount={project.files?project.files?.length:0}
                         userRole={profile ? profile.role : "Client"}
                     // onEdit={handleEdit}

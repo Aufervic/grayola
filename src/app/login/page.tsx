@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState(""); // Estado para mensajes de error
 
   const router = useRouter()
-  const { session, profile } = useSessionContext()
+  const { session } = useSessionContext()
 
   useEffect(() => {
       if (session !== null) {
@@ -43,6 +43,7 @@ export default function LoginPage() {
       }
     } catch (err) {
       setErrorMessage("Ocurrió un error inesperado. Por favor, intenta nuevamente.");
+      console.log(err)
     }
   };
 

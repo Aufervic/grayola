@@ -3,6 +3,7 @@ import { useSessionContext } from "@/utils/SessionContext";
 import { useRouter } from "next/navigation";
 import ProjectsGrid from "@/components/ProjectsGrid";
 import { useEffect, useState } from "react";
+import { Project } from "@/utils/inerfaces";
 
 
 // Función para cargar proyectos desde la API de Supabase
@@ -55,7 +56,7 @@ async function loadProjects(userRole: string, userID: string) {
 
 // Componente principal de ProjectsPage
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);  // Estado de carga para la verificación de sesión
   const session = useSessionContext();  // Obtiene la sesión del contexto
   const router = useRouter();
@@ -67,7 +68,7 @@ export default function ProjectsPage() {
     } else {
       // Si hay sesión, cargar proyectos
       // console.log(session)
-      loadProjects(session.profile?.role, session.profile?.user_id).then((data) => {
+      loadProjects(session.profile?.role || "", session.profile?.user_id || "").then((data) => {
         setProjects(data);
         setLoading(false);  // Marca que la carga de proyectos ha finalizado
       });

@@ -3,14 +3,9 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { supabase, useSessionContext } from "@/utils/SessionContext";
+import { Project } from "@/utils/inerfaces";
 
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  files: string[]; // URLs of uploaded files
-}
 
 export default function EditProject() {
   const router = useRouter();
@@ -34,7 +29,7 @@ export default function EditProject() {
     } else if (profile?.role !== "Project Manager") {
       router.push("/projects");
     }
-  }, [session, router]);
+  }, [session, router, profile]);
 
   useEffect(() => {
     if (!projectID) return;
@@ -154,7 +149,7 @@ export default function EditProject() {
     }
   };
 
-  if (!project) {
+  if (!project || !Object.keys(project).length) {
     return (
       <div className='p-6 bg-gradient-to-br from-green-100 via-cyan-200 to-yellow-100 min-h-screen'>
         <p className="text-center">Cargando...</p>

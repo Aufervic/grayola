@@ -14,7 +14,7 @@ export default function SignUp() {
   const [message, setMessage] = useState("");
 
   const router = useRouter()
-  const { session, profile } = useSessionContext()
+  const { session } = useSessionContext()
 
   useEffect(() => {
     if (session !== null) {
@@ -66,7 +66,7 @@ export default function SignUp() {
 
 
       // Iniciar sesión automáticamente después del registro
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });

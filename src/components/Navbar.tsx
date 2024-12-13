@@ -163,8 +163,8 @@ export default function Navbar() {
             {session ? (
               <>
                 <div className="flex flex-col items-start space-y-1">
-                  <span className="text-gray-700 font-semibold">{profile.first_name}</span>
-                  <span className="text-sm text-gray-500">{profile.role || 'Rol no asignado'}</span>
+                  <span className="text-gray-700 font-semibold">{profile?.first_name}</span>
+                  <span className="text-sm text-gray-500">{profile?.role || 'Rol no asignado'}</span>
                 </div>
                 <button
                   onClick={handleLogout}

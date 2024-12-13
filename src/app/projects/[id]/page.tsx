@@ -4,6 +4,7 @@ import { FiEdit, FiTrash } from 'react-icons/fi';
 import { useEffect, useState } from "react";
 import { useSessionContext } from "@/utils/SessionContext";
 import { useParams, useRouter } from "next/navigation";
+import { Project } from '@/utils/inerfaces';
 
 async function loadProject(id: string) {
     const url = `https://efoeppbhiedlznwxecaa.supabase.co/rest/v1/projects?id=eq.${id}`
@@ -30,13 +31,13 @@ export default function ProjectDetail() {
     const params = useParams()
     const router = useRouter()
     const projectID = params.id;
-    const [project, setProject] = useState<any>(null);
+    const [project, setProject] = useState<Project | null>(null);
     const [error, setError] = useState<string | null>(null);
     const { session, profile } = useSessionContext();
 
 
     useEffect(() => {
-        if (session === null || session.session === null ) {
+        if (session === null ) {
             // Si no hay sesión, redirigir al login
             router.push("/login");        
         } else {
@@ -51,8 +52,12 @@ export default function ProjectDetail() {
             loadProject(projectID?projectID+"":"").then((data)=>{
                 setProject(data);
             })
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Ocurrió un error inesperado");
+            }
         }
     }, [projectID]);
 
@@ -60,7 +65,7 @@ export default function ProjectDetail() {
         return <div>Error: {error}</div>;
     }
 
-    if (!project) {
+    if (!project || !Object.keys(project).length) {
         return (
             <div className='p-6 bg-gradient-to-br from-green-100 via-green-200 to-cyan-100 min-h-screen'>
                 <p className="text-center">Cargando...</p>
@@ -81,7 +86,7 @@ export default function ProjectDetail() {
                 <div className="mb-6">
                     <h3 className="text-2xl font-medium text-gray-800">Archivos del Proyecto</h3>
                     <ul className="mt-2 space-y-2">
-                        {project.files?.length > 0 ? (
+                        {!!project.files?.length  ? (
                             project.files.map((file: string, index: number) => (
                                 <li key={index} className="flex items-center space-x-2">
                                     {/* Icono de archivo */}

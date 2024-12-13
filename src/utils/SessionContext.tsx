@@ -1,7 +1,7 @@
-// SessionContext.tsx
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, Session } from "@supabase/supabase-js";
+import { Profile, SessionContextType } from "./inerfaces";
 
 export const supabase = createClient(
   "https://efoeppbhiedlznwxecaa.supabase.co/",
@@ -9,15 +9,15 @@ export const supabase = createClient(
 );
 
 
-const SessionContext = createContext<any>(null);
+const SessionContext = createContext<SessionContextType >({});
 
 export const useSessionContext = () => {
   return useContext(SessionContext);
 };
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
-  const [session, setSession] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);  // Estado para almacenar el perfil
+  const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);  // Estado para almacenar el perfil
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { supabase, useSessionContext } from "@/utils/SessionContext";
+import {Project, Designer} from "@/utils/inerfaces"
+
 
 
 async function loadProject(id: string) {
@@ -47,50 +49,13 @@ async function loadDesigners() {
 }
 
 
-async function loadProject2(id: string) {
-  console.log("ho 1")
-  const { data, error } = await supabase
-    .from("projects")
-    .select("id, title, description, files, designer_id")
-    .eq("id", id)
-    .single();
-  console.log("ho 2")
-
-  if (error) {
-    console.log("Error fetching project:", error.message);
-    alert("Error cargando los datos del proyecto.");
-    return;
-  }
-
-  return data
-}
-
-
-async function loadDesigners2() {
-  console.log("hla 1")
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("id, first_name, user_id")
-    .eq("role", "Designer");
-
-  console.log("hla 2")
-  if (error) {
-    console.log("Error fetching designers:", error.message);
-    alert("Error cargando la lista de diseñadores.");
-    return;
-  }
-
-  return data
-}
-
-
 export default function AssignDesigner() {
   const router = useRouter();
   const { session, profile } = useSessionContext()
 
   const { id } = useParams();
-  const [project, setProject] = useState<any>(null)
-  const [designers, setDesigners] = useState<any>([])
+  const [project, setProject] = useState<Project>({})
+  const [designers, setDesigners] = useState<Designer[]>([])
   const [selectedDesigner, setSelectedDesigner] = useState("");
 
   useEffect(() => {
@@ -100,7 +65,7 @@ export default function AssignDesigner() {
     } else if (profile?.role !== "Project Manager") {
       router.push("/projects");
     }
-  }, [session, router]);
+  }, [session, router, profile]);
 
   useEffect(() => {
     if (!id) return;
@@ -115,7 +80,7 @@ export default function AssignDesigner() {
     })
   }, [id]);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("1")
     const { error } = await supabase
@@ -134,7 +99,7 @@ export default function AssignDesigner() {
     router.push(`/projects/${id}`);
   };
 
-  if (!project) {
+  if (!Object.keys(project).length) {
     return (
       <div className='p-6 bg-gradient-to-br from-green-100 via-cyan-200 to-green-100 min-h-screen'>
         <p className="text-center">Cargando detalles del proyecto...</p>
@@ -153,7 +118,7 @@ export default function AssignDesigner() {
 
           <h3 className="text-lg font-semibold text-gray-700 mt-4">Archivos:</h3>
           <ul className="list-disc list-inside">
-            {project.files?.map((file: any, index: any) => (
+            {project.files?.map((file: string, index: number) => (
               <li key={index}>
                 <a href={file} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                   Ver archivo {index + 1}
@@ -175,7 +140,7 @@ export default function AssignDesigner() {
             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
           >
             <option value="">-- Seleccionar --</option>
-            {designers?.map((designer: any) => (
+            {designers?.map((designer: Designer) => (
               <option key={designer?.id} value={designer?.user_id}>
                 {designer?.first_name}
               </option>
