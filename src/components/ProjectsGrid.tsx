@@ -70,7 +70,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                         id={project.id}
                         title={project?.title}
                         description={project?.description}
-                        attachmentsCount={project.files?.length}
+                        attachmentsCount={project.files?project.files?.length:0}
                         userRole={profile ? profile.role : "Client"}
                     // onEdit={handleEdit}
                     // onDelete={handleDelete}

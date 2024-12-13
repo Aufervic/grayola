@@ -25,6 +25,7 @@ export default function EditProject() {
   const [files, setFiles] = useState<File[]>([]);
   const [existingFiles, setExistingFiles] = useState<string[]>([]);
   const [filesToDelete, setFilesToDelete] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false); // Estado de carga
 
   const router = useRouter();
 
@@ -76,13 +77,17 @@ export default function EditProject() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setLoading(true); // Inicia la carga
+
     // Delete selected files from Supabase storage
+    console.log("Removiendo archivos...")
     for (const fileUrl of filesToDelete) {
       const fileName = fileUrl.split("/public/")[1];
       const { error } = await supabase.storage.from("projects").remove([`public/${fileName}`]);
 
       if (error) {
         console.log("Error deleting file:", error);
+        setLoading(false);
         return;
       }
     }
@@ -90,6 +95,7 @@ export default function EditProject() {
     const remainingFiles = existingFiles.filter((url) => !filesToDelete.includes(url));
 
     // Upload new files to Supabase storage
+    console.log("Subiendo nuevos archivos...")
     const uploadedFileUrls: string[] = [];
     for (const file of files) {
       const { data, error } = await supabase.storage
@@ -98,6 +104,7 @@ export default function EditProject() {
 
       if (error) {
         console.log("Error uploading file:", error);
+        setLoading(false);
         return;
       }
 
@@ -111,6 +118,7 @@ export default function EditProject() {
     }
 
     // Update project in Supabase
+    console.log("Actualizando datos en supabase bd")
     const updatedProject = {
       title,
       description,
@@ -130,6 +138,7 @@ export default function EditProject() {
       }
     );
 
+    setLoading(false);
     if (response.ok) {
       alert("Proyecto actualizado con éxito");
       router.push("/projects");
@@ -223,8 +232,9 @@ export default function EditProject() {
             <button
               type="submit"
               className="w-full py-2 px-4 bg-green-600 text-white font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-            >
-              Guardar Cambios
+              disabled={loading} // Deshabilitar botón mientras carga
+              >
+                  {loading ? "Guardando Cambios..." : "Guardar Cambios"}
             </button>
           </div>
         </form>

@@ -3,12 +3,25 @@ export default function AboutPage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-500 via-yellow-100 to-cyan-500 py-12 px-4 sm:px-6 lg:px-8">
-  <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg p-8">
+            <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg p-8">
                 <h2 className="text-3xl font-semibold text-green-600 text-center mb-8">
                     Acerca de las Cuentas en el Sistema
                 </h2>
 
                 <div className="space-y-12">
+                    {/* Notas */}
+                    <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <h3 className="text-2xl font-semibold text-red-800 mb-4">Notas:</h3>
+                        <div className="mt-4">
+                            <h4 className="font-semibold text-red-800">¡Importante!</h4>
+                            <ul className="list-disc list-inside text-red-700">
+                                <li>El correo usado para registrarse en el sistema debe ser real, de esta manera podrá aceptar el correo de confirmación, de otro modo no podrá ingresar.</li>
+                                <li>El registro de correos desde una misma IP está limitado.</li>
+                                <li>Algunos problemas se solucionan recargando.</li>
+                            </ul>
+                        </div>
+                    </div>
+
                     {/* Clientes */}
                     <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
                         <h3 className="text-2xl font-semibold text-gray-800 mb-4">Clientes</h3>

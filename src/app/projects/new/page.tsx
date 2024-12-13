@@ -16,12 +16,12 @@ export default function NewProject() {
 
     useEffect(() => {
         if (session === null || session.session === null) {
-          // Si no hay sesión, redirigir al login
-          router.push("/login");
+            // Si no hay sesión, redirigir al login
+            router.push("/login");
         } else {
-          // Si hay sesión
+            // Si hay sesión
         }
-      }, [session, router]);
+    }, [session, router]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -33,7 +33,7 @@ export default function NewProject() {
         e.preventDefault();
         console.log("Empezar a crear")
         setLoading(true); // Inicia la carga
-        
+
 
         // Subir archivos a Supabase Storage
         const fileUrls: string[] = []; // Para almacenar las URLs de los archivos subidos
@@ -41,7 +41,7 @@ export default function NewProject() {
             const timestamp = Date.now(); // O puedes usar una librería para generar un UUID.
             const uniqueFileName = `${timestamp}-${file.name}`;
 
-            console.log("1")
+            console.log("subiendo archivo(s)")
             const { data, error } = await supabase.storage
                 .from('projects') // El nombre de tu contenedor en Supabase
                 .upload(`public/${uniqueFileName}`, file, { upsert: false });
@@ -51,17 +51,17 @@ export default function NewProject() {
                 setLoading(false);
                 return;
             }
-            console.log("2")
+            console.log("Archivo subido con éxito")
             // Obtener la URL pública del archivo subido
             const { data: publicData } = supabase.storage
                 .from('projects')
                 .getPublicUrl(data.path);
 
-                if (!publicData) {
-                    console.log("Error al obtener la URL del archivo");
-                    setLoading(false);
-                    return;
-                }
+            if (!publicData) {
+                console.log("Error al obtener la URL del archivo");
+                setLoading(false);
+                return;
+            }
 
             // Guardar la URL en el array de URLs
             fileUrls.push(publicData.publicUrl); // Usamos 'publicUrl' correctamente
@@ -75,7 +75,6 @@ export default function NewProject() {
             user_id: session?.profile?.user_id
         };
 
-        console.log(JSON.stringify(requestBody))
         // Enviar la solicitud POST a la API para crear el proyecto
         const response = await fetch("https://efoeppbhiedlznwxecaa.supabase.co/rest/v1/projects", {
             method: "POST",
@@ -103,66 +102,68 @@ export default function NewProject() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md border border-gray-200">
-            <h1 className="text-2xl font-semibold text-gray-800 mb-6">Nuevo proyecto de diseño</h1>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Título del proyecto */}
-                <div>
-                    <label htmlFor="title" className="block text-sm font-bold text-gray-700">Título del Proyecto:</label>
-                    <input
-                        id="title"
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                        className="mt-1 block w-full border border-green-500 rounded-md shadow-sm focus:border-green-600 focus:ring-green-600 sm:text-sm px-3"
-                    />
-                </div>
+        <div className='p-6 bg-gradient-to-br from-green-100 via-green-300 to-cyan-300 min-h-screen'>
+            <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md border border-gray-200">
+                <h1 className="text-2xl font-semibold text-gray-800 mb-6">Nuevo proyecto de diseño</h1>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Título del proyecto */}
+                    <div>
+                        <label htmlFor="title" className="block text-sm font-bold text-gray-700">Título del Proyecto:</label>
+                        <input
+                            id="title"
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                            className="mt-1 block w-full p-2 border border-green-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-green-200 sm:text-sm px-3"
+                        />
+                    </div>
 
-                {/* Descripción del proyecto */}
-                <div>
-                    <label htmlFor="description" className="block text-sm font-bold text-gray-700">Descripción del Proyecto:</label>
-                    <textarea
-                        id="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                        className="mt-1 block w-full border border-green-500 rounded-md shadow-sm focus:border-green-600 focus:ring-green-600 sm:text-sm px-3"
-                    />
-                </div>
+                    {/* Descripción del proyecto */}
+                    <div>
+                        <label htmlFor="description" className="block text-sm font-bold text-gray-700">Descripción del Proyecto:</label>
+                        <textarea
+                            id="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                            className="mt-1 block w-full p-2 border border-green-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-green-200 sm:text-sm px-3"
+                        />
+                    </div>
 
-                {/* Archivos del proyecto */}
-                <div>
-                    <label htmlFor="files" className="block text-sm font-bold text-gray-700">Archivos del Proyecto</label>
-                    <input
-                        id="files"
-                        type="file"
-                        multiple
-                        onChange={handleFileChange}
-                        className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-                    />
-                    {files.length > 0 && (
-                        <ul className="mt-2 space-y-1">
-                            {files.map((file, index) => (
-                                <li key={index} className="text-gray-700 text-sm">
-                                    {file.name}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
+                    {/* Archivos del proyecto */}
+                    <div>
+                        <label htmlFor="files" className="block text-sm font-bold text-gray-700">Archivos del Proyecto</label>
+                        <input
+                            id="files"
+                            type="file"
+                            multiple
+                            onChange={handleFileChange}
+                            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                        />
+                        {files.length > 0 && (
+                            <ul className="mt-2 space-y-1">
+                                {files.map((file, index) => (
+                                    <li key={index} className="text-gray-700 text-sm">
+                                        {file.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
 
-                {/* Botón de envío */}
-                <div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 px-4 bg-green-600 text-white font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                        disabled={loading} // Deshabilitar botón mientras carga
-                    >
-                        {loading ? "Creando..." : "Crear Proyecto"}
-                    </button>
-                </div>
-            </form>
+                    {/* Botón de envío */}
+                    <div>
+                        <button
+                            type="submit"
+                            className="w-full py-2 px-4 bg-green-600 text-white font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                            disabled={loading} // Deshabilitar botón mientras carga
+                        >
+                            {loading ? "Creando..." : "Crear Proyecto"}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
