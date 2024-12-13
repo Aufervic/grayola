@@ -50,7 +50,7 @@ export default function EditProject() {
         setDescription(projectData.description);
         setExistingFiles(projectData.files || []);
       } else {
-        console.error("Error fetching project data");
+        console.log("Error fetching project data");
       }
     };
 
@@ -82,7 +82,7 @@ export default function EditProject() {
       const { error } = await supabase.storage.from("projects").remove([`public/${fileName}`]);
 
       if (error) {
-        console.error("Error deleting file:", error);
+        console.log("Error deleting file:", error);
         return;
       }
     }
@@ -97,7 +97,7 @@ export default function EditProject() {
         .upload(`public/${Date.now()}-${file.name}`, file);
 
       if (error) {
-        console.error("Error uploading file:", error);
+        console.log("Error uploading file:", error);
         return;
       }
 
@@ -139,90 +139,96 @@ export default function EditProject() {
   };
 
   if (!project) {
-    return <p>Cargando proyecto...</p>;
+    return (
+      <div className='p-6 bg-gradient-to-br from-green-100 via-cyan-200 to-yellow-100 min-h-screen'>
+        <p className="text-center">Cargando...</p>
+      </div>
+    )
   }
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md border border-gray-200">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Editar proyecto ({projectID})</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Título del proyecto */}
-        <div>
-          <label htmlFor="title" className="block text-sm font-bold text-gray-700">
-            Título del Proyecto:
-          </label>
-          <input
-            id="title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="mt-1 block w-full border border-green-500 rounded-md shadow-sm focus:border-green-600 focus:ring-green-600 sm:text-sm px-3"
-          />
-        </div>
+    <div className='p-6 bg-gradient-to-br from-green-100 via-cyan-200 to-yellow-100 min-h-screen'>
+      <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md border border-green-100 ">
+        <h1 className="text-2xl font-semibold text-gray-800 mb-6">Editar proyecto ({projectID})</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Título del proyecto */}
+          <div>
+            <label htmlFor="title" className="block text-sm font-bold text-gray-700">
+              Título del Proyecto:
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="mt-1 block w-full p-2 border border-green-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-green-200 sm:text-sm px-3"
+            />
+          </div>
 
-        {/* Descripción del proyecto */}
-        <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-bold text-gray-700"
-          >
-            Descripción del Proyecto:
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            className="mt-1 block w-full border border-green-500 rounded-md shadow-sm focus:border-green-600 focus:ring-green-600 sm:text-sm px-3"
-          />
-        </div>
+          {/* Descripción del proyecto */}
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-bold text-gray-700"
+            >
+              Descripción del Proyecto:
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              className="mt-1 block w-full p-2 border border-green-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-green-200 sm:text-sm px-3"
+            />
+          </div>
 
-        {/* Archivos existentes */}
-        <div>
-        <label className="block text-sm font-bold text-gray-700">
-  Archivos existentes <span className="text-red-500">(Selecciona los archivos que deseas borrar)</span>:
-</label>
-          <ul className="mt-2 space-y-1">
-            {existingFiles.map((fileUrl, index) => (
-              <li key={index} className="text-gray-700 text-sm flex items-center">
-                <input
-                  type="checkbox"
-                  onChange={() => toggleFileToDelete(fileUrl)}
-                  className="mr-2"
-                />
-                <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-                  {fileUrl.split("/").pop()}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+          {/* Archivos existentes */}
+          <div>
+            <label className="block text-sm font-bold text-gray-700">
+              Archivos existentes <span className="text-red-500">(Selecciona los archivos que deseas borrar)</span>:
+            </label>
+            <ul className="mt-2 space-y-1">
+              {existingFiles.map((fileUrl, index) => (
+                <li key={index} className="text-gray-700 text-sm flex items-center">
+                  <input
+                    type="checkbox"
+                    onChange={() => toggleFileToDelete(fileUrl)}
+                    className="mr-2"
+                  />
+                  <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+                    {fileUrl.split("/").pop()}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        {/* Subir nuevos archivos */}
-        <div>
-          <label htmlFor="files" className="block text-sm font-bold text-gray-700">
-            Subir nuevos archivos
-          </label>
-          <input
-            id="files"
-            type="file"
-            multiple
-            onChange={handleFileChange}
-            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 px-3"
-          />
-        </div>
+          {/* Subir nuevos archivos */}
+          <div>
+            <label htmlFor="files" className="block text-sm font-bold text-gray-700">
+              Subir nuevos archivos
+            </label>
+            <input
+              id="files"
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 px-3"
+            />
+          </div>
 
-        {/* Botón de envío */}
-        <div>
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-green-600 text-white font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-          >
-            Guardar Cambios
-          </button>
-        </div>
-      </form>
+          {/* Botón de envío */}
+          <div>
+            <button
+              type="submit"
+              className="w-full py-2 px-4 bg-green-600 text-white font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            >
+              Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

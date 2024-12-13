@@ -18,7 +18,7 @@ export default function Navbar() {
     console.log("Cerrar sesion bro")
     const { error } = await supabase.auth.signOut();  // Cerramos sesión con Supabase
     if (error) {
-      console.error("Error al cerrar sesión", error.message);
+      console.log("Error al cerrar sesión", error.message);
     }
   };
 
@@ -34,7 +34,6 @@ export default function Navbar() {
                 alt="Logo de Grayola"
                 width={120} // Ancho de la imagen
                 height={40} // Alto de la imagen
-                priority
               />
             </Link>
           </div>

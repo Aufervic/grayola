@@ -29,7 +29,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         // Obtener el perfil del usuario desde la base de datos de Supabase (puedes ajustar la tabla y campos según tu configuración)
         const { data, error } = await supabase.from('profiles').select('*').eq('user_id', session.user.id).single();
         if (error) {
-          console.error("Error al obtener el perfil", error.message);
+          console.log("Error al obtener el perfil", error.message);
         } else {
           setProfile(data);  // Almacenar los datos del perfil
         }
@@ -43,7 +43,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
           // Obtener perfil de nuevo después de cada cambio de sesión
           const { data, error } = await supabase.from('profiles').select('*').eq('user_id', session.user.id).single();
           if (error) {
-            console.error("Error al obtener el perfil", error.message);
+            console.log("Error al obtener el perfil", error.message);
           } else {
             setProfile(data);  // Almacenar los datos del perfil
           }

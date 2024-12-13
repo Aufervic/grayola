@@ -76,10 +76,9 @@ export default function ProjectsPage() {
 
   if (loading) {
     return (
-<div className="p-6 bg-gradient-to-br from-yellow-100 via-green-100 to-cyan-100 min-h-screen">
-
-  <p className="text-center">Cargando...</p>
-</div>
+      <div className="p-6 bg-gradient-to-br from-yellow-100 via-green-100 to-cyan-100 min-h-screen">
+        <p className="text-center">Cargando...</p>
+      </div>
     )
   }
 

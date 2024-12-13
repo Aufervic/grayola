@@ -36,7 +36,7 @@ export default function ProjectCard({
         .eq("id", id);
 
       if (error) {
-        console.error("Error eliminando proyecto:", error.message);
+        console.log("Error eliminando proyecto:", error.message);
         alert("Hubo un error al eliminar el proyecto. Intenta de nuevo.");
         return;
       }
@@ -45,7 +45,7 @@ export default function ProjectCard({
 
       router.push("/projects");
     } catch (err) {
-      console.error("Error inesperado:", err);
+      console.log("Error inesperado:", err);
       alert("Ocurrió un error inesperado. Intenta de nuevo.");
     }
   };

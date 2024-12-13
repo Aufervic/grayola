@@ -51,7 +51,11 @@ export default function ProjectDetail() {
     }
 
     if (!project) {
-        return <div>Cargando...</div>;
+        return (
+            <div className='p-6 bg-gradient-to-br from-green-100 via-green-200 to-cyan-100 min-h-screen'>
+                <p className="text-center">Cargando...</p>
+            </div>
+        )
     }
 
     return (
