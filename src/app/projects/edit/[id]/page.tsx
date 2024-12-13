@@ -17,7 +17,7 @@ interface Project {
 
 export default function EditProject() {
   const params = useParams();
-  const projectId = params.id;
+  const projectID = params.id;
 
   const [project, setProject] = useState<Project | null>(null);
   const [title, setTitle] = useState("");
@@ -29,11 +29,11 @@ export default function EditProject() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!projectId) return;
+    if (!projectID) return;
 
     const fetchProject = async () => {
       const response = await fetch(
-        `https://efoeppbhiedlznwxecaa.supabase.co/rest/v1/projects?id=eq.${projectId}`,
+        `https://efoeppbhiedlznwxecaa.supabase.co/rest/v1/projects?id=eq.${projectID}`,
         {
           headers: {
             apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmb2VwcGJoaWVkbHpud3hlY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM3NjYzMTcsImV4cCI6MjA0OTM0MjMxN30.l9A4wpr6OzW0FtO2vYj6HKs50T_ZJzOX6jhCw5GxAG8",
@@ -55,7 +55,7 @@ export default function EditProject() {
     };
 
     fetchProject();
-  }, [projectId]);
+  }, [projectID]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -118,7 +118,7 @@ export default function EditProject() {
     };
 
     const response = await fetch(
-      `https://efoeppbhiedlznwxecaa.supabase.co/rest/v1/projects?id=eq.${projectId}`,
+      `https://efoeppbhiedlznwxecaa.supabase.co/rest/v1/projects?id=eq.${projectID}`,
       {
         method: "PATCH",
         headers: {
@@ -144,7 +144,7 @@ export default function EditProject() {
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md border border-gray-200">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Editar proyecto ({projectId})</h1>
+      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Editar proyecto ({projectID})</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Título del proyecto */}
         <div>

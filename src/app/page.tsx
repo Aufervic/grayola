@@ -13,6 +13,7 @@ export default function Home() {
         alt="Logo de Grayola"
         width={200}               // Ajusta el tamaño de la imagen
         height={320}
+        priority
       />
     </div>
 

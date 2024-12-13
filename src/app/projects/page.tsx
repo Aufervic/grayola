@@ -75,7 +75,12 @@ export default function ProjectsPage() {
   }, [session, router]);
 
   if (loading) {
-    return <p>Cargando...</p>;  // Puedes mostrar un spinner o mensaje mientras se cargan los proyectos
+    return (
+<div className="p-6 bg-gradient-to-br from-yellow-100 via-green-100 to-cyan-100 min-h-screen">
+
+  <p className="text-center">Cargando...</p>
+</div>
+    )
   }
 
   return <ProjectsGrid projects={projects} />;  // Muestra los proyectos si la sesión es válida

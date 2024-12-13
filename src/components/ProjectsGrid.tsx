@@ -21,16 +21,21 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
     }, []);
 
     if (!isClient) {
-        return <div>Cargando...</div>; // Opcional: muestra algo mientras el componente se carga en el cliente
+        return (
+            <div className="p-6 bg-gradient-to-br from-yellow-100 via-green-100 to-cyan-100 min-h-screen">
+
+                <div className="text-center">Cargando...</div>
+            </div>
+        )
     }
 
     if (!session) {
         return <p>No estás autenticado. Por favor, inicia sesión.</p>;
     }
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
-            <div className="flex justify-center items-center">
-                <h2 className="text-2xl font-semibold text-center mb-4">Proyectos</h2>
+        <div className="p-6 bg-gradient-to-br from-yellow-100 via-green-100 to-cyan-100 min-h-screen">
+            <div className="flex justify-center items-center mb-6">
+                <h2 className="text-3xl font-extrabold text-center text-gray-800">Proyectos</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {profile?.role === "Client" ? (
@@ -55,7 +60,9 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                             Haz clic para crear un nuevo proyecto.
                         </p>
                     </div>
-                ) : (<></>)}
+                ) : (
+                    <></>
+                )}
 
                 {projects?.map((project: any) => (
                     <ProjectCard
@@ -64,14 +71,13 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                         title={project?.title}
                         description={project?.description}
                         attachmentsCount={project.files?.length}
-                        userRole={profile?profile.role:"Client"}
+                        userRole={profile ? profile.role : "Client"}
                     // onEdit={handleEdit}
                     // onDelete={handleDelete}
                     />
                 ))}
-
             </div>
+        </div>
 
-        </div >
     )
 }

@@ -34,6 +34,7 @@ export default function Navbar() {
                 alt="Logo de Grayola"
                 width={120} // Ancho de la imagen
                 height={40} // Alto de la imagen
+                priority
               />
             </Link>
           </div>
